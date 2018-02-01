@@ -11,11 +11,17 @@ from torch.autograd import Variable
 
 import os
 import csv
-"""
-leaky_relu사용.
-Pred 값이 - ~ +가 나옴
-real target value is only 0 or 1 value
 
+
+"""
+leaky_relu사용.-> sigmoid 로 변경.
+Pred 값이 - ~ +가 나옴 -> pred 값이 0~1 로 나옴.
+Binary Cross Entropy 나 
+KLD 사용 가능.
+real target value is only 0 or 1 value
+one to one lstm model 사용중이였는데
+many to one lstm model 로 변경 해서 예측 모델 돌릴 예정.
+제작중....
 
 """
 

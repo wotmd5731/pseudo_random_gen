@@ -11,12 +11,13 @@ from torch.autograd import Variable
 
 import os
 import csv
+
 """
-leaky_relu사용.
-Pred 값이 - ~ +가 나옴
+leaky_relu사용.-> sigmoid 로 변경.
+Pred 값이 - ~ +가 나옴 -> pred 값이 0~1 로 나옴.
+Binary Cross Entropy 나 
+KLD 사용 가능.
 real target value is only 0 or 1 value
-
-
 """
 
         
@@ -30,8 +31,8 @@ class network(nn.Module):
         
     def forward(self, x,hx,cx):
         out , (hx, cx) = self.lstm(x, (hx, cx))
-        x = F.leaky_relu(self.fc(out))
-#        x = F.sigmoid(self.fc(out))
+#        x = F.leaky_relu(self.fc(out))
+        x = F.sigmoid(self.fc(out))
         
         return x ,hx,cx
     
