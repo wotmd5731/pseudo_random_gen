@@ -13,6 +13,8 @@ import os
 import csv
 
 """
+NOT USED.
+
 leaky_relu사용.-> sigmoid 로 변경.
 Pred 값이 - ~ +가 나옴 -> pred 값이 0~1 로 나옴.
 Binary Cross Entropy 나 
@@ -54,15 +56,21 @@ torch_data = torch.from_numpy(np_data).type(torch.LongTensor)
 main_num = torch_data[:,:6]
 bonus_num = torch_data[:,6].unsqueeze(1)
 
+#flip data seq
+inv_idx = torch.arange(main_num.size(0)-1, -1, -1).long()
+main_num = main_num.index_select(0, inv_idx)
+bonus_num = bonus_num.index_select(0, inv_idx)
+
+
 main_data = Variable(torch.zeros(main_num.size(0),46).scatter_(1,main_num,1)[:,1:].unsqueeze(0))
 bonus_data = Variable(torch.zeros(bonus_num.size(0),46).scatter_(1,bonus_num,1)[:,1:].unsqueeze(0))
 
 net = network()
 #loss = nn.CrossEntropyLoss()
 #crit = nn.KLDivLoss()
-crit = nn.MSELoss()
-#crit = nn.BCELoss(size_average = True)
-opti = optim.Adam(net.parameters(),lr=0.0001)
+#crit = nn.MSELoss()
+crit = nn.BCELoss(size_average = True)
+opti = optim.Adam(net.parameters(),lr=0.001)
 
 for i in range(main_data.size(1)):
     out,hx,cx = net(main_data[0,i,:].view(1,1,-1),hx,cx)

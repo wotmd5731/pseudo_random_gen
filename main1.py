@@ -12,6 +12,8 @@ from torch.autograd import Variable
 import os
 import csv
 """
+NOT USED.
+
 leaky_relu사용.
 Pred 값이 - ~ +가 나옴
 real target value is only 0 or 1 value
@@ -50,11 +52,19 @@ data = data[3:]
 np_data = np.array(data, dtype=np.long)
 torch_data = torch.from_numpy(np_data).type(torch.LongTensor)
 
+
 main_num = torch_data[:,:6]
 bonus_num = torch_data[:,6].unsqueeze(1)
 
+#flip data seq
+inv_idx = torch.arange(main_num.size(0)-1, -1, -1).long()
+main_num = main_num.index_select(0, inv_idx)
+bonus_num = bonus_num.index_select(0, inv_idx)
+
+
 main_data = Variable(torch.zeros(main_num.size(0),46).scatter_(1,main_num,1)[:,1:].unsqueeze(0))
 bonus_data = Variable(torch.zeros(bonus_num.size(0),46).scatter_(1,bonus_num,1)[:,1:].unsqueeze(0))
+
 
 net = network()
 #loss = nn.CrossEntropyLoss()
